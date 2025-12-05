@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Anime Fight</title>
+<style>
+body {
+  margin: 0;
+  background: #111;
+  overflow: hidden;
+}
+#game {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://i.imgur.com/C5nUkhc.jpeg') center/cover;
+}
+.character, .enemy {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  bottom: 20px;
+}
+.character {
+  background: url('https://i.imgur.com/OKtY9ky.png') center/cover;
+  left: 100px;
+}
+.enemy {
+  background: url('https://i.imgur.com/91kZC6U.png') center/cover;
+  right: 100px;
+}
+.health {
+  position: absolute;
+  top: 10px;
+  width: 150px;
+  height: 10px;
+  background: red;
+}
+#pHealth { left: 10px; }
+#eHealth { right: 10px; }
+</style>
+</head>
+
+<body>
+<div id="game">
+  <div id="pHealth" class="health"></div>
+  <div id="eHealth" class="health"></div>
+
+  <div class="character" id="player"></div>
+  <div class="enemy" id="enemy"></div>
+</div>
+
+<script>
+let player = document.getElementById("player");
+let enemy = document.getElementById("enemy");
+let pHp = 100;
+let eHp = 100;
+let playerX = 100;
+
+// Movement
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "ArrowRight") playerX += 15;
+  if(e.key === "ArrowLeft") playerX -= 15;
+  if(e.key === " ") attack();
+  player.style.left = playerX + "px";
+});
+
+// Punch Attack
+function attack(){
+  let px = player.getBoundingClientRect();
+  let ex = enemy.getBoundingClientRect();
+  let dist = Math.abs(px.left - ex.left);
+
+  if(dist < 100){
+    eHp -= 10;
+    document.getElementById("eHealth").style.width = eHp + "px";
+  }
+}
+
+// Enemy auto attack
+setInterval(()=>{
+  let px = player.getBoundingClientRect();
+  let ex = enemy.getBoundingClientRect();
+  let dist = Math.abs(px.left - ex.left);
+
+  if(dist < 100){
+    pHp -= 5;
+    document.getElementById("pHealth").style.width = pHp + "px";
+  }
+}, 600);
+</script>
+
+</body>
+</html>
